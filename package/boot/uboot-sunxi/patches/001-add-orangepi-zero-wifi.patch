@@ -220,8 +220,8 @@
 +CONFIG_SUN8I_EMAC=y
 +CONFIG_USB_EHCI_HCD=y
 +CONFIG_SYS_USB_EVENT_POLL_VIA_INT_QUEUE=y
---- a/board/sunxi	2019-01-15 00:02:36.000000000 +0200
-+++ b/board/sunxi	2019-05-03 17:50:22.000000000 +0300
+--- a/board/sunxi/MAINTAINERS	2019-01-15 00:02:36.000000000 +0200
++++ b/board/sunxi/MAINTAINERS	2019-05-03 17:50:22.000000000 +0300
 @@ -355,6 +355,12 @@
  S:	Maintained
  F:	configs/orangepi_zero_defconfig

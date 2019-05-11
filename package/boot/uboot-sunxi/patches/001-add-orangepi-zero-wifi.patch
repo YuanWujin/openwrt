@@ -200,6 +200,17 @@
 +	status = "okay";
 +	usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
 +};
+--- a/configs/orangepi_zero_defconfig	1970-01-01 03:00:00.000000000 +0300
++++ b/configs/orangepi_zero_defconfig	2019-05-03 17:45:39.000000000 +0300
+@@ -5,7 +5,7 @@
+ CONFIG_DRAM_CLK=624
+ CONFIG_DRAM_ZQ=3881979
+ CONFIG_DRAM_ODT_EN=y
+-# CONFIG_VIDEO_DE2 is not set
++CONFIG_VIDEO_DE2=y
+ CONFIG_SPL_SPI_SUNXI=y
+ CONFIG_NR_DRAM_BANKS=1
+ # CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
 --- a/configs/orangepi_zero_wifi_defconfig	1970-01-01 03:00:00.000000000 +0300
 +++ b/configs/orangepi_zero_wifi_defconfig	2019-05-03 17:45:39.000000000 +0300
 @@ -0,0 +1,17 @@
@@ -220,8 +231,8 @@
 +CONFIG_SUN8I_EMAC=y
 +CONFIG_USB_EHCI_HCD=y
 +CONFIG_SYS_USB_EVENT_POLL_VIA_INT_QUEUE=y
---- a/board/sunxi	2019-01-15 00:02:36.000000000 +0200
-+++ b/board/sunxi	2019-05-03 17:50:22.000000000 +0300
+--- a/board/sunxi/MAINTAINERS	2019-01-15 00:02:36.000000000 +0200
++++ b/board/sunxi/MAINTAINERS	2019-05-03 17:50:22.000000000 +0300
 @@ -355,6 +355,12 @@
  S:	Maintained
  F:	configs/orangepi_zero_defconfig

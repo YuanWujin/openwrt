@@ -8,9 +8,65 @@
  	sun8i-h3-bananapi-m2-plus.dtb \
  	sun8i-h3-libretech-all-h3-cc.dtb \
  	sun8i-h3-nanopi-m1.dtb \
+--- a/cmd/Kconfig
++++ b/cmd/Kconfig
+@@ -1024,6 +1029,7 @@ menu "Misc commands"
+ config CMD_BMP
+ 	bool "Enable 'bmp' command"
+ 	depends on LCD || DM_VIDEO || VIDEO
++	default y
+ 	help
+ 	  This provides a way to obtain information about a BMP-format iamge
+ 	  and to display it. BMP (which presumably stands for BitMaP) is a
+--- a/include/config_distro_bootcmd.h
++++ b/include/config_distro_bootcmd.h
+@@ -364,6 +364,15 @@
+ 	BOOTENV_SHARED_EFI \
+ 	BOOTENV_SHARED_VIRTIO \
+ 	"boot_prefixes=/ /boot/\0" \
++	"splashpos=m,m\0" \
++	"splashimage=66000000\0" \
++	"loadsplash= " \
++		"for prefix in ${boot_prefixes}; do " \
++			"if test -e mmc 0 ${prefix}boot.bmp; then " \
++				"load mmc 0 ${splashimage} ${prefix}boot.bmp; " \
++				"bmp d ${splashimage}; " \
++			"fi; " \
++		"done\0" \
+ 	"boot_scripts=boot.scr.uimg boot.scr\0" \
+ 	"boot_script_dhcp=boot.scr.uimg\0" \
+ 	BOOTENV_BOOT_TARGETS \
+--- a/include/configs/sunxi-common.h
++++ b/include/configs/sunxi-common.h
+@@ -289,6 +289,16 @@
+ 
+ #endif /* CONFIG_VIDEO_SUNXI */
+ 
++#if defined CONFIG_VIDEO || defined CONFIG_DM_VIDEO
++#define CONFIG_VIDEO_LOGO
++#define CONFIG_SPLASH_SCREEN
++#define CONFIG_SPLASH_SCREEN_ALIGN
++#define CONFIG_BMP_16BPP
++#define CONFIG_BMP_24BPP
++#define CONFIG_BMP_32BPP
++#define CONFIG_VIDEO_BMP_RLE8
++#endif
++
+ /* Ethernet support */
+ 
+ #ifdef CONFIG_SUN7I_GMAC
+@@ -444,7 +454,7 @@
+ 
+ #ifdef CONFIG_USB_KEYBOARD
+ #define CONSOLE_STDIN_SETTINGS \
+-	"preboot=usb start\0" \
++	"preboot=run loadsplash; usb start\0" \
+ 	"stdin=serial,usbkbd\0"
+ #else
+ #define CONSOLE_STDIN_SETTINGS \
 --- a/arch/arm/dts/sun8i-h2-plus-orangepi-zero-wifi.dts	1970-01-01 03:00:00.000000000 +0300
 +++ b/arch/arm/dts/sun8i-h2-plus-orangepi-zero-wifi.dts	2019-05-03 18:15:54.000000000 +0300
-@@ -0,0 +1,189 @@
+@@ -0,0 +1,208 @@
 +/*
 + * Copyright (C) 2016 Icenowy Zheng <icenowy@aosc.xyz>
 + *
@@ -107,6 +163,17 @@
 +		reset-gpios = <&r_pio 0 7 GPIO_ACTIVE_LOW>;
 +		post-power-on-delay-ms = <200>;
 +	};
++//
++//	ve: video-engine@01c0e000 {
++//		compatible = "allwinner,sunxi-cedar-ve";
++//		reg = <0x01c0e000 0x1000>, <0x01c00000 0x10>, <0x01c20000 0x800>;
++//		memory-region = <&cma_pool>;      
++//		syscon = <&syscon>;         
++//		clocks = <&ccu CLK_AHB_VE>, <&ccu CLK_VE>, <&ccu CLK_DRAM_VE>;
++//		clock-names = "ahb", "mod", "ram";
++//		resets = <&ccu RST_VE>;
++//		interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
++//	};
 +};
 +
 +&ehci0 {
@@ -117,6 +184,10 @@
 +	status = "okay";
 +};
 +
++//&ve {
++//	status = "okay";
++//};
++//
 +&emac {
 +	phy-handle = <&int_mii_phy>;
 +	phy-mode = "mii";
@@ -152,6 +223,10 @@
 +};
 +
 +&ohci1 {
++	status = "okay";
++};
++
++&de {
 +	status = "okay";
 +};
 +

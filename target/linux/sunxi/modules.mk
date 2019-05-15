@@ -31,7 +31,7 @@ define KernelPackage/sunxi-ir
 	CONFIG_MEDIA_SUPPORT=y \
 	CONFIG_MEDIA_RC_SUPPORT=y \
 	CONFIG_RC_DEVICES=y \
-	CONFIG_IR_SUNXI=y \
+	CONFIG_IR_SUNXI \
 	CONFIG_RC_DECODERS=y \
 	CONFIG_RC_CORE=m \
 	CONFIG_LIRC=m \
@@ -50,9 +50,7 @@ define KernelPackage/sunxi-ir
 	CONFIG_IR_PWM_TX=m \
 	CONFIG_IR_SERIAL=m \
 	CONFIG_IR_SERIAL_TRANSMITTER=y \
-	CONFIG_IR_SIR=m \
-	CONFIG_IR_GPIO_CIR=m \
-	CONFIG_RC_MAP=m
+	CONFIG_IR_SIR=m
     FILES:= \
 	$(LINUX_DIR)/drivers/media/rc/sunxi-cir.ko \
 	$(LINUX_DIR)/drivers/media/rc/rc-core.ko \
